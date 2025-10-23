@@ -1,50 +1,95 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# QCloud API Factory For Laravel 宪章
 
 ## Core Principles
+### 基本信息
+- PHP >= 8.4
+- Laravel >=12
+- Package Name: lonquan/laravel-qcloud-apis
+- Namespace: EasyQCloudApi
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### 简单性与实用主义
+- 所有类与函数必须保持单一职责，避免过早抽象，优先采用组合而非继承。
+- 以可读性与维护性为先，拒绝为了“巧妙”而牺牲直观代码，必要时通过重构消除复杂设计。
+- 公共接口、变量与方法命名须清晰表达意图，若代码需要大量注释才能理解，则必须回到设计层面优化。
+**理由**: 本包面向 Laravel 开发者群体，清晰直接的实现能降低集成门槛并减少后续维护成本，实用主义确保聚焦真实业务问题。
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Fluent API 设计哲学
+- 提供从静态工厂到链式调用的多种使用方式，让常见场景开箱即用，复杂场景保持可扩展。
+- 所有公开 API 必须具备严格的类型提示与返回值声明，参数遵循“常用在前，可选在后”的顺序。
+- API 设计需服务于 IDE 自动补全与类型检查，确保开发者在自然语言般的调用链中表达操作意图。
+**理由**: 腾讯云 API 调用流程涉及产品、接口与参数多重配置，流式 API 设计降低认知负担，提升开发效率与可读性。
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Laravel 框架唯一性
+- 核心功能可以直接依赖 Laravel（含 Symfony 组件）能力，但公共契约优先使用 PSR 接口保持适度解耦。
+- 集成入口必须通过 Laravel 服务提供者、门面与可发布配置文件交付，配置管理支持数组、文件与环境变量。
+- 依赖注入坚持构造函数注入，严禁服务定位器或隐式全局依赖。
+**理由**: 项目明确服务于 Laravel 生态，深度利用框架特性可提供最顺滑的集成体验，同时保持与社区标准接口兼容。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### 架构一致性
+- 模块按业务功能划分，目录结构保持扁平与可导航，接口定义清晰描述模块边界。
+- 所有源码使用严格类型声明与 PSR-12/Laravel Pint 规范，工具类集中于 `Support/`，异常集中于 `Exceptions/`。
+- 在扩展点提供明确契约（Contracts）与配置钩子，确保未来新增云产品或客户端策略时无需破坏现有实现。
+**理由**: 一致的架构约定和模块边界让团队能够快速定位逻辑，降低扩展风险，保障代码质量随规模增长保持稳定。
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### 开发阶段灵活性
+- 0.x 版本阶段可在充分评估后进行破坏性 API 调整，每次重大修改必须在 `CHANGELOG` 中标注 “BREAKING CHANGE”。
+- 版本号遵循语义化版本：次版本（0.x.0）用于功能迭代，修订号（0.x.y）用于缺陷修复；发布 1.0.0 后严格遵守向后兼容策略。
+- 发布破坏性变更时必须提供迁移指导，废弃特性至少保留一个主版本周期。
+**理由**: 在探索最佳设计时保持灵活度，可以避免过早的兼容性债务；一旦稳定发布，通过严格的版本承诺为用户提供可预期的升级路径。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## 架构与技术标准
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- **代码组织**: 以业务能力模块化代码，保持目录扁平，所有核心功能依赖 Laravel 能力并通过接口隔离外部交互。
+- **目录结构**:
+  ```text
+  src/
+  ├── Contracts/          # 接口定义
+  ├── Exceptions/         # 自定义异常
+  ├── Support/            # 工具与辅助类
+  └── Factory.php         # 入口工厂（静态 Facade）
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+  tests/
+  ├── Unit/
+  ├── Integration/
+  └── Feature/
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+  docs/
+  README.md
+  CHANGELOG.md
+  ```
+- **技术栈**: PHP 8.4+，Laravel 12+，依赖管理使用 Composer，代码格式化采用 Laravel Pint，日志遵循 PSR-3。
+- **质量工具**: 静态分析使用 PHPStan 或 Psalm（Level ≥ 8），测试框架采用 PHPUnit 11+，必要时引入 Mock 以隔离外部服务。
+- **设计准则**: Factory 模式用于统一创建 API 客户端，扩展点需支持自定义消息处理、Client ID 生成与连接参数拓展。
+- **安全性**: 敏感信息必须通过配置传入并在日志中脱敏，连接策略需支持认证、超时、重连与健康检查。
+
+#### 类成员声明顺序
+**声明**: 所有类成员的声明必须遵循统一的顺序，以提高代码可读性和一致性。
+
+**规则**:
+1. **常量**（const）- 类级别的常量定义
+2. **静态属性**（按可见性排序：public static → protected static → private static）
+3. **实例属性**（按可见性排序：public → protected → private）
+4. **构造函数**（__construct）
+5. **静态方法**（按可见性排序：public → protected → private）
+6. **实例方法**（按可见性排序：public → protected → private）
+7. **魔术方法**（如 __toString, __invoke, __get, __set 等）
+
+**理由**: 统一的成员声明顺序能够提高代码的可读性和可维护性。开发者能够快速定位特定类型的成员，减少认知负担。这种顺序遵循了从静态到实例、从属性到方法的逻辑分组，符合大多数开发者的阅读习惯。
+
+## 开发流程与质量闸门
+
+- **规划分阶段**: 复杂需求拆分为 3-6 个阶段，计划记录于 `specs/<feature>/plan.md`，随进度更新状态，完成后清理计划文件。
+- **实施循环**: 先理解现有实现，再编写失败测试，再最小化实现，通过后重构；出现连续三次失败需停下复盘并寻找替代方案。
+- **编码规范**: 所有文件启用 `declare(strict_types=1)`，公开类与方法必须补全 PHPDoc，使用语义化英文命名与命名参数，禁止滥用魔术方法。
+- **测试策略**: 核心业务覆盖率 ≥ 90%，公开 API 必须有功能测试，可靠性逻辑需覆盖边界与异常场景，测试须独立、确定、可复现。
+- **版本控制**: 采用 Conventional Commits，功能开发使用独立分支，CI 必须通过测试、静态分析与格式检查后方可合并，发布版本需更新 `CHANGELOG`。
+- **质量门控**: 在合并前完成测试、静态分析、格式化、自我审查、API 文档和示例验证；禁止绕过钩子、静默异常或提交不合规代码。
+- **文档要求**: 维护 README、CHANGELOG、CONTRIBUTING、LICENSE 与 docs/，描述用例、配置与迁移指引；复杂逻辑注释聚焦“为什么”。
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- **修订流程**: 宪章修改需提交提案，说明动机与影响，经技术团队讨论并获相关角色批准后实施，同时更新版本与变更记录。
+- **版本管理**: 宪章版本遵循语义化；新增原则或重大治理指引视为 MINOR，重大约束调整导致不兼容时提升 MAJOR，文字澄清为 PATCH。
+- **合规检查**: 每项新功能在启动前必须进行宪章合规自检，代码评审需检查对原则与质量门控的遵循，定期审计现有实现并建立整改跟踪。
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-10-22 | **Last Amended**: 2025-10-22

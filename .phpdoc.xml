@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpdoc>
+    <title>Laravel QCloud APIs</title>
+    <description>腾讯云 API Laravel 客户端包</description>
+    <version>1.0.0</version>
+    <directory>src</directory>
+    <target>docs/api</target>
+    <template>default</template>
+    <extensions>
+        <extension>php</extension>
+    </extensions>
+    <ignore>
+        <directory>tests</directory>
+        <directory>vendor</directory>
+    </ignore>
+    <visibility>public</visibility>
+    <source>
+        <encoding>utf-8</encoding>
+    </source>
+    <output>
+        <format>html</format>
+    </output>
+</phpdoc>

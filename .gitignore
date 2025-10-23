@@ -1,0 +1,50 @@
+# Composer
+/vendor/
+composer.phar
+composer.lock
+
+# PHP
+*.log
+*.cache
+*.env
+.env.*
+!.env.example
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Testing
+/coverage/
+/.phpunit.result.cache
+/phpunit.xml
+
+# Build artifacts
+/build/
+/dist/
+
+# Laravel specific
+/bootstrap/cache/
+/storage/
+/public/hot
+/public/storage
+/storage/*.key
+/.env
+/.env.backup
+/.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+
+# Package specific
+/.phpunit.cache
+/.phpunit.result.cache
